@@ -4,10 +4,10 @@ var multiparty = require('multiparty')
 var HttpDispatcher = function() {
     //> added more methods to avoid crash
     // TODO this is not as specified for the HTTP protocol. HEAD requests will now return nothing because we don't add a listener
-	this.listeners = { get: [ ], post: [ ], put: [ ], head: [ ], delete: [ ], trace: [ ], connect: [ ] };
+	this.listeners = { get: [ ], post: [ ], put: [ ], head: [ ], delete: [ ], trace: [ ], connect: [ ], options: [ ] };
 
 	this.filters = { before: [ ], after: [ ] };
-	this.errorListener = function(req, res) { 
+	this.errorListener = function(req, res) {
 		res.writeHead(404);
 		res.end();
 	}
@@ -29,9 +29,12 @@ HttpDispatcher.prototype.filter = function(method, url, cb) {
 }
 HttpDispatcher.prototype.onGet = function(url, cb) {
 	this.on('get', url, cb);
-}	
+}
 HttpDispatcher.prototype.onPost = function(url, cb) {
 	this.on('post', url, cb);
+}
+HttpDispatcher.prototype.onDelete = function(url, cb) {
+	this.on('delete', url, cb);
 }
 HttpDispatcher.prototype.onError = function(cb) {
 	this.errorListener = cb;
